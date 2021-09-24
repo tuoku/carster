@@ -1,5 +1,8 @@
 {
-  "expo": {
+  
+  "expo": {"androidNavigationBar": {
+    "backgroundColor":"#000000"
+},
     "name": "carster",
     "slug": "carster",
     "version": "1.0.0",
@@ -24,6 +27,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
+      
     },
     "web": {
       "favicon": "./assets/favicon.png"
