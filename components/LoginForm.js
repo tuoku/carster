@@ -1,28 +1,28 @@
-import React, { useContext } from "react";
-import PropTypes from "prop-types";
-import { View, StyleSheet } from "react-native";
-import { Button, Input } from "react-native-elements";
-import useLoginForm from "../hooks/LoginHooks";
-import { MainContext } from "../contexts/MainContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useLogin } from "../hooks/ApiHooks";
-import Icon from "react-native-vector-icons/FontAwesome";
+import React, {useContext} from 'react';
+import PropTypes from 'prop-types';
+import {View, StyleSheet} from 'react-native';
+import {Button, Input} from 'react-native-elements';
+import useLoginForm from '../hooks/LoginHooks';
+import {MainContext} from '../contexts/MainContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useLogin} from '../hooks/ApiHooks';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const LoginForm = () => {
-  const { inputs, handleInputChange } = useLoginForm();
-  const { setIsLoggedIn, setUser } = useContext(MainContext);
-  const { login } = useLogin();
+  const {inputs, handleInputChange} = useLoginForm();
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {login} = useLogin();
 
   const doLogin = async () => {
     try {
       const loginInfo = await login(inputs);
-      console.log("doLogin response", loginInfo);
-      await AsyncStorage.setItem("userToken", loginInfo.token);
+      console.log('doLogin response', loginInfo);
+      await AsyncStorage.setItem('userToken', loginInfo.token);
       // TODO: Save user info (loginInfo.user) to MainContext
       setUser(loginInfo.user);
       setIsLoggedIn(true);
     } catch (error) {
-      console.log("doLogin error", error);
+      console.log('doLogin error', error);
     }
     // navigation.navigate('Home');
   };
@@ -30,26 +30,24 @@ const LoginForm = () => {
   return (
     <>
       <Input
-      
         inputContainerStyle={styles.inputView}
-        inputStyle={{color:"#fff"}}
+        inputStyle={{color: '#fff'}}
         autoCapitalize="none"
         leftIcon={<Icon name="user" size={24} color="white" />}
         placeholder="username"
-        onChangeText={(txt) => handleInputChange("username", txt)}
+        onChangeText={(txt) => handleInputChange('username', txt)}
       />
       <Input
-        
         inputContainerStyle={styles.inputView}
-        inputStyle={{color:"#fff"}}
+        inputStyle={{color: '#fff'}}
         autoCapitalize="none"
         leftIcon={<Icon name="lock" size={24} color="white" />}
         placeholder="password"
-        onChangeText={(txt) => handleInputChange("password", txt)}
+        onChangeText={(txt) => handleInputChange('password', txt)}
         secureTextEntry={true}
       />
 
-      <Button raised title="Login!" onPress={doLogin}/>
+      <Button raised title="Login!" onPress={doLogin} />
     </>
   );
 };
@@ -57,9 +55,10 @@ const LoginForm = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+
   },
 
   image: {
@@ -67,17 +66,17 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     borderRadius: 20,
     padding: 10,
-    width: "100%",
+    width: '100%',
     height: 45,
     marginBottom: 10,
     borderWidth: 1,
-    marginHorizontal: 0,
-    borderColor: "#fff",
-    alignItems: "center",
-    color: "#fff",
+    paddingHorizontal: 10,
+    borderColor: '#fff',
+    alignItems: 'center',
+    color: '#fff',
   },
 
   TextInput: {
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     marginLeft: 20,
-    color: "black",
+    color: 'black',
   },
 
   forgot_button: {
@@ -94,13 +93,13 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
-    width: "80%",
+    width: '80%',
     borderRadius: 25,
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 40,
-    backgroundColor: "#FF1493",
+    backgroundColor: '#FF1493',
   },
 });
 
