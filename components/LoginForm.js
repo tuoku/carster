@@ -28,7 +28,7 @@ const LoginForm = () => {
   };
 
   return (
-    <>
+    <View style={styles.container}>
       <Input
         inputContainerStyle={styles.inputView}
         inputStyle={{color: '#fff'}}
@@ -48,17 +48,15 @@ const LoginForm = () => {
       />
 
       <Button raised title="Login!" onPress={doLogin} />
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-
   },
 
   image: {
