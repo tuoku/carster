@@ -6,9 +6,29 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
 import Home from '../views/Home';
-
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItem,
+} from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LogoutItem from '../components/LogoutItem';
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+const drawerContent = () => {
+  const logout = () => {
+    const {setIsLoggedIn} = useContext(MainContext);
+    // await AsyncStorage.clear();
+    setIsLoggedIn(false);
+  };
+  return (
+    <DrawerContentScrollView>
+      <LogoutItem></LogoutItem>
+    </DrawerContentScrollView>
+  );
+};
 
 const StackScreen = () => {
   const {isLoggedIn} = useContext(MainContext);
@@ -17,23 +37,31 @@ const StackScreen = () => {
       {isLoggedIn ? (
         <>
           <Stack.Screen
-            name="Home"
-            component={Home}
+            name="Drawer"
+            component={DrawerScreen}
             options={{
-              headerShown: true,
+              headerShown: false,
             }}
           />
         </>
       ) : (
         <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{
-              headerShown: false,
-            }}
-          />
+          name="Login"
+          component={Login}
+          options={{
+            headerShown: false,
+          }}
+        />
       )}
     </Stack.Navigator>
+  );
+};
+
+const DrawerScreen = () => {
+  return (
+    <Drawer.Navigator initialRouteName="Home" drawerContent={drawerContent}>
+      <Drawer.Screen name="Home" component={Home}></Drawer.Screen>
+    </Drawer.Navigator>
   );
 };
 
