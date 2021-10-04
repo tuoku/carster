@@ -7,10 +7,12 @@ import {
   View,
   StyleSheet,
   Text,
+  Linking,
 } from 'react-native';
-import {Header} from 'react-native-elements';
+import {Header, Icon} from 'react-native-elements';
 import AppLoading from 'expo-app-loading';
 import {useFonts, FugazOne_400Regular} from '@expo-google-fonts/fugaz-one';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Home = ({navigation}) => {
   let [fontsLoaded] = useFonts({
@@ -20,6 +22,14 @@ const Home = ({navigation}) => {
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
+    const docsNavigate = () => {
+      Linking.openURL(`https://reactnativeelements.com/docs`);
+    };
+
+    const playgroundNavigate = () => {
+      Linking.openURL(`https://react-native-elements.js.org`);
+    };
+
     return (
       <SafeAreaView style={styles.droidSafeArea}>
         <Header
@@ -28,11 +38,7 @@ const Home = ({navigation}) => {
             padding: 0,
             margin: 0,
           }}
-          leftComponent={{
-            icon: 'menu',
-            color: '#000',
-            iconStyle: {color: '#000'},
-          }}
+          leftComponent={<Icon name="menu" color="#000" onPress={() => console.log('pressed')}/>}
           leftContainerStyle={{
             top: 5,
           }}
@@ -48,7 +54,18 @@ const Home = ({navigation}) => {
               lineHeight: 43,
             },
           }}
-          rightComponent={{icon: 'search', color: '#000'}}
+          // 'type' prop to change icon set
+          rightComponent={
+            <View style={styles.headerRight}>
+              <Icon
+                type="feather"
+                name="upload"
+                color="#000"
+                onPress={() => console.log('pressed')}
+              />
+              <Icon name="search" color="#000" style={{marginLeft: 15}} />
+            </View>
+          }
         />
         <View style={styles.container}></View>
         <StatusBar style={{backgroundColor: '#fff'}} />
@@ -65,6 +82,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ccc',
     paddingTop: Platform.OS === 'android' ? 10 : 0,
+  },
+  headerRight: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 });
 
