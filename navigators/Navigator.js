@@ -10,25 +10,18 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
+  DrawerItemList,
 } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LogoutItem from '../components/LogoutItem';
+import Notifications from '../views/Notifications';
+import Messages from '../views/Messages';
+import Settings from '../views/Settings';
+import Profile from '../views/Profile';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
-
-const drawerContent = () => {
-  const logout = () => {
-    const {setIsLoggedIn} = useContext(MainContext);
-    // await AsyncStorage.clear();
-    setIsLoggedIn(false);
-  };
-  return (
-    <DrawerContentScrollView>
-      <LogoutItem></LogoutItem>
-    </DrawerContentScrollView>
-  );
-};
 
 const StackScreen = () => {
   const {isLoggedIn} = useContext(MainContext);
@@ -58,9 +51,65 @@ const StackScreen = () => {
 };
 
 const DrawerScreen = () => {
+  const {user} = useContext(MainContext);
   return (
-    <Drawer.Navigator initialRouteName="Home" drawerContent={drawerContent}>
-      <Drawer.Screen name="Home" component={Home}></Drawer.Screen>
+    <Drawer.Navigator
+      initialRouteName="Home"
+      backBehavior="firstRoute"
+      drawerContent={(props) => {
+        return (
+          <DrawerContentScrollView {...props}>
+            <DrawerItemList {...props} />
+            <LogoutItem></LogoutItem>
+          </DrawerContentScrollView>
+        );
+      }}
+    >
+      <Drawer.Screen
+        name={user.username}
+        component={Profile}
+        options={{
+          drawerIcon: ({focused, size}) => (
+            <Icon name="user" size={size} color="black" />
+          ),
+        }}
+      ></Drawer.Screen>
+      <Drawer.Screen
+        name="Home"
+        component={Home}
+        options={{
+          drawerIcon: ({focused, size}) => (
+            <Icon name="home" size={size} color="black" />
+          ),
+        }}
+      ></Drawer.Screen>
+      <Drawer.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{
+          drawerIcon: ({focused, size}) => (
+            <Icon name="flag" size={size} color="black" />
+          ),
+        }}
+      ></Drawer.Screen>
+      <Drawer.Screen
+        name="Messages"
+        component={Messages}
+        options={{
+          drawerIcon: ({focused, size}) => (
+            <Icon name="comment" size={size} color="black" />
+          ),
+        }}
+      ></Drawer.Screen>
+      <Drawer.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          drawerIcon: ({focused, size}) => (
+            <Icon name="cog" size={size} color="black" />
+          ),
+        }}
+      ></Drawer.Screen>
     </Drawer.Navigator>
   );
 };
