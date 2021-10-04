@@ -25,11 +25,19 @@ const Home = ({navigation}) => {
         <Header
           containerStyle={{
             backgroundColor: '#fff',
+            padding: 0,
+            margin: 0,
           }}
           leftComponent={{
             icon: 'menu',
             color: '#000',
             iconStyle: {color: '#000'},
+          }}
+          leftContainerStyle={{
+            top: 5,
+          }}
+          rightContainerStyle={{
+            top: 5,
           }}
           centerComponent={{
             text: 'Carster',
@@ -37,12 +45,13 @@ const Home = ({navigation}) => {
               color: '#000',
               fontFamily: 'FugazOne_400Regular',
               fontSize: 36,
+              lineHeight: 43,
             },
           }}
           rightComponent={{icon: 'search', color: '#000'}}
         />
         <View style={styles.container}></View>
-        <StatusBar style="auto" />
+        <StatusBar style={{backgroundColor: '#fff'}} />
       </SafeAreaView>
     );
   }
@@ -55,7 +64,7 @@ const styles = StyleSheet.create({
   droidSafeArea: {
     flex: 1,
     backgroundColor: '#ccc',
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
+    paddingTop: Platform.OS === 'android' ? 10 : 0,
   },
 });
 
