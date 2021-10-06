@@ -11,12 +11,34 @@ import LoginForm from '../components/LoginForm';
 import {zhCN} from 'date-fns/locale';
 import {Button} from 'react-native-elements';
 import RegisterForm from '../components/RegisterForm';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const {width, height} = Dimensions.get('window');
 
 const Login = ({navigation}) => {
   const video = React.useRef(null);
   const [status, setStatus] = React.useState({});
   const [registerFormToggle, setRegisterFormToggle] = React.useState(false);
+  // console.log('Login isLoggedIn', isLoggedIn);
+
+  const getToken = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    console.log('logIn asyncstorage token:', userToken);
+    if (userToken) {
+      try {
+        const userInfo = await checkToken(userToken);
+        if (userInfo.user_id) {
+          setUser(userInfo);
+          setIsLoggedIn(true);
+        }
+      } catch (e) {
+        console.log('getToken', e.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
   return (
     <View style={styles.container}>
       <Video
