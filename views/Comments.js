@@ -11,33 +11,22 @@ import {
   Card,
   ListItem as RNEListItem,
 } from 'react-native-elements';
-import {Video, Audio} from 'expo-av';
-import {useTag, useUser, useMedia} from '../hooks/ApiHooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useUser, useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {View} from 'react-native';
 
-const ListItem = ({singleMedia, navigation, showButtons}) => {
+const Comments = ({navigation}) => {
   const {update, setUpdate} = useContext(MainContext);
   console.log('singleMedia', singleMedia);
   const {deleteMedia} = useMedia();
   const {getUserInfo} = useUser();
   const [ownerInfo, setOwnerInfo] = useState({username: ''});
-  const [likes, setLikes] = useState([]);
-  const [iAmLikingIt, setIAmLikingIt] = useState(false);
-  const [videoRef, setVideoRef] = useState(null);
   const [disabled, setDisabled] = useState(false);
-  const {getFilesByTag} = useTag();
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
 
   const getOwnerInfo = async () => {
-    const token = await AsyncStorage.getItem('userToken');
-    setOwnerInfo(await getUserInfo(singleMedia.user_id, token));
-  };
-  const getLikes = async () => {
-    // TODO: use api hooks to get favourites
-    // setLikes()
-    // set the value of iAmLikingIt
+    //const token = await AsyncStorage.getItem('userToken');
+    //setOwnerInfo(await getUserInfo(params.user_id, token));
   };
   const getAvatar = async () => {
     try {
@@ -60,8 +49,12 @@ const ListItem = ({singleMedia, navigation, showButtons}) => {
     <RNEListItem style={{width: '100%'}}>
       <View style={{width: '100%'}}>
         <View style={{flexDirection: 'row', marginBottom: 15}}>
-          <Avatar size="small" rounded source={{uri: avatar}}></Avatar>
-          <Text style={{marginLeft: 10}}>{ownerInfo.username}</Text>
+          <Avatar
+            size="small"
+            rounded
+            source={{uri: uploadsUrl + singleMedia.thumbnails?.w160}}
+          ></Avatar>
+          <Text style={{marginLeft: 10}}>juku</Text>
           <Icon
             type="ionicon"
             name="ios-ellipsis-vertical-outline"
@@ -85,44 +78,16 @@ const ListItem = ({singleMedia, navigation, showButtons}) => {
               source={{uri: uploadsUrl + singleMedia.filename}}
             />
           )}
-          {singleMedia.media_type === 'video' && (
-            <TouchableOpacity // usePoster hides video so use this to start it
-              disabled={disabled}
-              onPress={() => {
-                setDisabled(true); // disable touchableOpacity when video is started
-              }}
-            >
-              <Video
-                style={{width: '100%', height: undefined, aspectRatio: 1}}
-                source={{uri: uploadsUrl + singleMedia.filename}}
-                useNativeControls
-                resizeMode="contain"
-                usePoster
-                posterSource={{uri: uploadsUrl + singleMedia.screenshot}}
-              />
-            </TouchableOpacity>
-          )}
         </View>
         <View style={{flexDirection: 'row', width: '100%', marginTop: 10}}>
-          {iAmLikingIt ? (
-            <Icon
-              //ios-heart for filled heart
-              type="ionicon"
-              name="ios-heart"
-              color="#000"
-              onPress={() => console.log('menu')}
-              size={40}
-            />
-          ) : (
-            <Icon
-              type="ionicon"
-              name="ios-heart-outline"
-              color="#000"
-              onPress={() => console.log('menu')}
-              size={40}
-            />
-          )}
-
+          <Icon
+            //ios-heart for filled heart
+            type="ionicon"
+            name="ios-heart-outline"
+            color="#000"
+            onPress={() => console.log('menu')}
+            size={40}
+          />
           <Icon
             type="ionicon"
             name="ios-chatbubble-ellipses-outline"
@@ -137,10 +102,10 @@ const ListItem = ({singleMedia, navigation, showButtons}) => {
   );
 };
 
-ListItem.propTypes = {
+Comments.propTypes = {
   singleMedia: PropTypes.object.isRequired,
   navigation: PropTypes.object.isRequired,
   showButtons: PropTypes.bool.isRequired,
 };
 
-export default ListItem;
+export default Comments;
