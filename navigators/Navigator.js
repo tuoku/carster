@@ -78,6 +78,7 @@ const DrawerScreen = () => {
         name="Home"
         component={Home}
         options={{
+          headerShown: false,
           drawerIcon: ({focused, size}) => (
             <Icon name="home" size={size} color="black" />
           ),
