@@ -233,18 +233,66 @@ const useTag = () => {
 const useFavourites = () => {
   const addFavourite = async (fileId, token) => {
     // post /favourites
+    const requestOptions = {
+      method: 'POST',
+      // mode: 'no-cors',
+      headers: {'Content-Type': 'application/json', 'x-access-token': token},
+      body: JSON.stringify(fileId),
+    };
+    try {
+      const response = await doFetch(baseUrl + 'favorites', requestOptions);
+      return response;
+    } catch (error) {
+      console.log('fav error', error.message);
+    }
   };
 
   const deleteFavourite = async (fileId, token) => {
     // DELETE /favourites/file/:id
+
+    const requestOptions = {
+      method: 'DELETE',
+      // mode: 'no-cors',
+      headers: {'Content-Type': 'application/json', 'x-access-token': token},
+    };
+    try {
+      const response = await doFetch(baseUrl + 'favorites/file/' + fileId, requestOptions);
+      return response;
+    } catch (error) {
+      console.log('fav error', error.message);
+    }
   };
 
   const getFavouritesByFileId = async (fileId) => {
     // get /favourites/file/:id
+
+    const requestOptions = {
+      method: 'GET',
+      // mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+    };
+    try {
+      const response = await doFetch(baseUrl + 'favorites/file/' + fileId, requestOptions);
+      return response;
+    } catch (error) {
+      console.log('fav error', error.message);
+    }
   };
 
   const getMyFavourites = (token) => {
     // GET /favourites
+
+    const requestOptions = {
+      method: 'GET',
+      // mode: 'no-cors',
+      headers: {'Content-Type': 'application/json', 'x-access-token': token},
+    };
+    try {
+      const response = doFetch(baseUrl + 'favorites', requestOptions);
+      return response;
+    } catch (error) {
+      console.log('fav error', error.message);
+    }
   };
 
   return {
