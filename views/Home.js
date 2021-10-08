@@ -7,12 +7,11 @@ import {
   View,
   StyleSheet,
   Text,
-  Linking,
 } from 'react-native';
 import {Header, Icon} from 'react-native-elements';
 import AppLoading from 'expo-app-loading';
 import {useFonts, FugazOne_400Regular} from '@expo-google-fonts/fugaz-one';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import List from '../components/List';
 
 const Home = ({navigation}) => {
   let [fontsLoaded] = useFonts({
@@ -22,14 +21,6 @@ const Home = ({navigation}) => {
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
-    const docsNavigate = () => {
-      Linking.openURL(`https://reactnativeelements.com/docs`);
-    };
-
-    const playgroundNavigate = () => {
-      Linking.openURL(`https://react-native-elements.js.org`);
-    };
-
     return (
       <SafeAreaView style={styles.droidSafeArea}>
         <Header
@@ -38,7 +29,13 @@ const Home = ({navigation}) => {
             padding: 0,
             margin: 0,
           }}
-          leftComponent={<Icon name="menu" color="#000" onPress={() => console.log('pressed')}/>}
+          leftComponent={
+            <Icon
+              name="menu"
+              color="#000"
+              onPress={() => console.log('menu')}
+            />
+          }
           leftContainerStyle={{
             top: 5,
           }}
@@ -67,7 +64,9 @@ const Home = ({navigation}) => {
             </View>
           }
         />
-        <View style={styles.container}></View>
+        <View style={styles.container}>
+          <List navigation={navigation} />
+        </View>
         <StatusBar style={{backgroundColor: '#fff'}} />
       </SafeAreaView>
     );

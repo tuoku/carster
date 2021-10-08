@@ -23,7 +23,7 @@ const useMedia = (ownFiles) => {
 
   const loadMedia = async () => {
     try {
-      let mediaIlmanThumbnailia = await useTag().getFilesByTag(appID);
+      let mediaIlmanThumbnailia = await useTag().getFilesByTag('ilenAppi');
 
       if (ownFiles) {
         mediaIlmanThumbnailia = mediaIlmanThumbnailia.filter(
