@@ -12,7 +12,7 @@ import {
   ListItem as RNEListItem,
 } from 'react-native-elements';
 import {Video, Audio} from 'expo-av';
-import {useTag, useUser, useMedia} from '../hooks/ApiHooks';
+import {useTag, useUser, useMedia, useFavourites} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
 import {View} from 'react-native';
