@@ -1,4 +1,6 @@
+// eslint-disable-next-line no-unused-vars
 import React, {Component} from 'react';
+// eslint-disable-next-line no-unused-vars
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
 export default class Profile extends Component {
@@ -59,11 +61,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 30,
   },
-  name: {
+  /* name: {
     fontSize: 28,
     color: '#696969',
     fontWeight: '600',
   },
+   */
   info: {
     fontSize: 16,
     color: '#00BFFF',

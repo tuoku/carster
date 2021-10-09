@@ -5,11 +5,10 @@ import Navigator from './navigators/Navigator';
 
 const App = () => {
   return (
-      <MainProvider>
-        <Navigator />
-      </MainProvider>
+    <MainProvider>
+      <Navigator />
+    </MainProvider>
   );
 };
 
 export default App;
-

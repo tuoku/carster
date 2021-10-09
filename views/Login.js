@@ -11,6 +11,7 @@ import LoginForm from '../components/LoginForm';
 import {zhCN} from 'date-fns/locale';
 import {Button} from 'react-native-elements';
 import RegisterForm from '../components/RegisterForm';
+
 const {width, height} = Dimensions.get('window');
 
 const Login = ({navigation}) => {
