@@ -28,16 +28,31 @@ const ListItem = ({singleMedia, navigation, showButtons}) => {
   const [videoRef, setVideoRef] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const {getFilesByTag} = useTag();
+  const {getMyFavourites, addFavourite, deleteFavourite, getFavouritesByFileId} = useFavourites();
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
 
   const getOwnerInfo = async () => {
     const token = await AsyncStorage.getItem('userToken');
     setOwnerInfo(await getUserInfo(singleMedia.user_id, token));
+    console.log('token in listitem', token);
   };
   const getLikes = async () => {
-    // TODO: use api hooks to get favourites
-    // setLikes()
-    // set the value of iAmLikingIt
+    try {
+      const likesByFileId = await getFavouritesByFileId(singleMedia.file_id);
+      setLikes(likesByFileId);
+
+      const myLikes = await getMyFavourites(await AsyncStorage.getItem('userToken'));
+      console.log('myLikes', myLikes);
+      const currentLikes = myLikes.filter((like) => {
+        if (like.file_id === singleMedia.file_id) {
+          return like;
+        }
+      });
+      console.log('currentLikes', currentLikes);
+      setIAmLikingIt(currentLikes.length > 0 ? true : false);
+    } catch (e) {
+      console.log('Error', e.message);
+    }
   };
   const getAvatar = async () => {
     try {
@@ -47,6 +62,20 @@ const ListItem = ({singleMedia, navigation, showButtons}) => {
       }
     } catch (error) {
       console.error(error.message);
+    }
+  };
+  const likeMedia = async () => {
+    console.log("likemedia", singleMedia.file_id)
+    addFavourite(singleMedia.file_id, await AsyncStorage.getItem('userToken'));
+  };
+  const dislikeMedia = async () => {
+    deleteFavourite(singleMedia.file_id, await AsyncStorage.getItem('userToken'));
+  };
+  const updateLikesUI = async (id) => {
+    if(id === 0) {
+      likes.length += 1;
+    } else {
+      likes.length -= 1;
     }
   };
 
@@ -104,13 +133,16 @@ const ListItem = ({singleMedia, navigation, showButtons}) => {
           )}
         </View>
         <View style={{flexDirection: 'row', width: '100%', marginTop: 10}}>
+          <Text>Likes: {likes.length}</Text>
+        </View>
+        <View style={{flexDirection: 'row', width: '100%', marginTop: 10}}>
           {iAmLikingIt ? (
             <Icon
               //ios-heart for filled heart
               type="ionicon"
               name="ios-heart"
-              color="#000"
-              onPress={() => console.log('menu')}
+              color="#b8142a"
+              onPress={async () => dislikeMedia().then(setIAmLikingIt(false)).then(updateLikesUI(1))}
               size={40}
             />
           ) : (
@@ -118,7 +150,7 @@ const ListItem = ({singleMedia, navigation, showButtons}) => {
               type="ionicon"
               name="ios-heart-outline"
               color="#000"
-              onPress={() => console.log('menu')}
+              onPress={async () => likeMedia().then(setIAmLikingIt(true)).then(updateLikesUI(0))}
               size={40}
             />
           )}

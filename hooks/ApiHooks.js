@@ -232,15 +232,16 @@ const useTag = () => {
 
 const useFavourites = () => {
   const addFavourite = async (fileId, token) => {
-    // post /favourites
     const requestOptions = {
       method: 'POST',
-      // mode: 'no-cors',
-      headers: {'Content-Type': 'application/json', 'x-access-token': token},
-      body: JSON.stringify(fileId),
+      headers: {'x-access-token': token, 'Content-type': 'application/json'},
+      body: JSON.stringify({
+        file_id: fileId,
+      }),
     };
     try {
-      const response = await doFetch(baseUrl + 'favorites', requestOptions);
+      const response = await doFetch(baseUrl + 'favourites', requestOptions);
+      console.log("body: " + requestOptions.body);
       return response;
     } catch (error) {
       console.log('fav error', error.message);
@@ -248,15 +249,12 @@ const useFavourites = () => {
   };
 
   const deleteFavourite = async (fileId, token) => {
-    // DELETE /favourites/file/:id
-
     const requestOptions = {
       method: 'DELETE',
-      // mode: 'no-cors',
-      headers: {'Content-Type': 'application/json', 'x-access-token': token},
+      headers: {'x-access-token': token},
     };
     try {
-      const response = await doFetch(baseUrl + 'favorites/file/' + fileId, requestOptions);
+      const response = await doFetch(baseUrl + 'favourites/file/' + fileId, requestOptions);
       return response;
     } catch (error) {
       console.log('fav error', error.message);
@@ -268,11 +266,9 @@ const useFavourites = () => {
 
     const requestOptions = {
       method: 'GET',
-      // mode: 'no-cors',
-      headers: {'Content-Type': 'application/json'},
     };
     try {
-      const response = await doFetch(baseUrl + 'favorites/file/' + fileId, requestOptions);
+      const response = await doFetch(baseUrl + 'favourites/file/' + fileId, requestOptions);
       return response;
     } catch (error) {
       console.log('fav error', error.message);
@@ -280,15 +276,12 @@ const useFavourites = () => {
   };
 
   const getMyFavourites = (token) => {
-    // GET /favourites
-
     const requestOptions = {
       method: 'GET',
-      // mode: 'no-cors',
-      headers: {'Content-Type': 'application/json', 'x-access-token': token},
+      headers: {'x-access-token': token},
     };
     try {
-      const response = doFetch(baseUrl + 'favorites', requestOptions);
+      const response = doFetch(baseUrl + 'favourites', requestOptions);
       return response;
     } catch (error) {
       console.log('fav error', error.message);
