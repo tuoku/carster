@@ -18,6 +18,7 @@ import Notifications from '../views/Notifications';
 import Messages from '../views/Messages';
 import Settings from '../views/Settings';
 import Profile from '../views/Profile';
+import Comments from '../views/Comments';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Stack = createNativeStackNavigator();
@@ -46,6 +47,7 @@ const StackScreen = () => {
           }}
         />
       )}
+      <Stack.Screen name="Comments" component={Comments} />
     </Stack.Navigator>
   );
 };

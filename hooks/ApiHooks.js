@@ -262,8 +262,6 @@ const useFavourites = () => {
   };
 
   const getFavouritesByFileId = async (fileId) => {
-    // get /favourites/file/:id
-
     const requestOptions = {
       method: 'GET',
     };
@@ -296,4 +294,66 @@ const useFavourites = () => {
   };
 };
 
-export {useMedia, useLogin, useUser, useTag, useFavourites};
+const useComments = () => {
+  const addComment = (file_id, comment, token) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({file_id, comment}),
+    };
+    try {
+      const response = doFetch(baseUrl + 'comments', requestOptions);
+      return response;
+    } catch (error) {
+      console.log('comment error', error.message);
+    }
+  };
+  const deleteComment = async (id, token) => {
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {'x-access-token': token},
+    };
+    try {
+      const response = await doFetch(baseUrl + 'comments/' + id, requestOptions);
+      return response;
+    } catch (error) {
+      console.log('com error', error.message);
+    }
+  };
+
+  const getCommentsByFileId = async (id) => {
+    const requestOptions = {
+      method: 'GET',
+    };
+    try {
+      const response = await doFetch(baseUrl + 'comments/file/' + id, requestOptions);
+      return response;
+    } catch (error) {
+      console.log('com error', error.message);
+    }
+  };
+
+  const getMyComments = (token) => {
+    const requestOptions = {
+      method: 'GET',
+      headers: {'x-access-token': token},
+    };
+    try {
+      const response = doFetch(baseUrl + 'comments', requestOptions);
+      return response;
+    } catch (error) {
+      console.log('com error', error.message);
+    }
+  };
+  return {
+    addComment,
+    deleteComment,
+    getCommentsByFileId,
+    getMyComments,
+  };
+};
+
+export {useMedia, useLogin, useUser, useTag, useFavourites, useComments};

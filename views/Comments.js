@@ -1,5 +1,10 @@
 import React, {useEffect, useContext, useState} from 'react';
-import {StyleSheet, ActivityIndicator, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {
@@ -10,102 +15,148 @@ import {
   Image,
   Card,
   ListItem as RNEListItem,
+  Input,
 } from 'react-native-elements';
-import {useUser, useMedia} from '../hooks/ApiHooks';
+import {
+  useTag,
+  useUser,
+  useMedia,
+  useFavourites,
+  useComments,
+} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {View} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {StatusBar} from 'expo-status-bar';
+import {FlatList} from 'react-native-gesture-handler';
+import ListItem from '../components/ListItem';
 
-const Comments = ({navigation}) => {
+const Comments = ({navigation, route}) => {
   const {update, setUpdate} = useContext(MainContext);
-  console.log('singleMedia', singleMedia);
-  const {deleteMedia} = useMedia();
+  console.log('getComments', route.params);
   const {getUserInfo} = useUser();
+  const {getFilesByTag} = useTag();
+  const {addComment, deleteComment, getCommentsByFileId, getMyComments} =
+    useComments();
   const [ownerInfo, setOwnerInfo] = useState({username: ''});
   const [disabled, setDisabled] = useState(false);
   const [avatar, setAvatar] = useState('http://placekitten.com/100');
+  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState('');
 
-  const getOwnerInfo = async () => {
-    //const token = await AsyncStorage.getItem('userToken');
-    //setOwnerInfo(await getUserInfo(params.user_id, token));
+  //post owner
+  const getPostOwnerInfo = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    setOwnerInfo(await getUserInfo(route.params.user_id, token));
   };
-  const getAvatar = async () => {
+  const getCommentOwnerInfo = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    setOwnerInfo(await getUserInfo(route.params.user_id, token));
+  };
+  const getAvatar = async (user_id) => {
     try {
-      const avatarList = await getFilesByTag('avatar_' + singleMedia.user_id);
+      let avatarList = await getFilesByTag('avatar_' + user_id);
       if (avatarList.length > 0) {
-        setAvatar(uploadsUrl + avatarList.pop().filename);
+        return uploadsUrl + avatarList.pop().filename;
       }
     } catch (error) {
       console.error(error.message);
     }
   };
+  const getComments = async () => {
+    console.log('row69 ', await getCommentsByFileId(route.params.file_id));
+    const fetchedComments = await getCommentsByFileId(route.params.file_id);
+    const comments = fetchedComments.map(async (comment, i) => {
+      console.log('comment i: ', i);
+      console.log('comment: ', comment.user_id);
+      console.log(await getAvatar(comment.user_id));
+      const newRow = 'avatarUri';
+      const newVal = await getAvatar(comment.user_id);
+      fetchedComments[i][newRow] = newVal;
+      console.log(fetchedComments);
+      setComments(fetchedComments);
+    });
+  };
 
   useEffect(() => {
-    getOwnerInfo();
+    getPostOwnerInfo();
     getAvatar();
-    getLikes();
+    getComments();
   }, []);
 
   return (
-    <RNEListItem style={{width: '100%'}}>
-      <View style={{width: '100%'}}>
-        <View style={{flexDirection: 'row', marginBottom: 15}}>
-          <Avatar
-            size="small"
-            rounded
-            source={{uri: uploadsUrl + singleMedia.thumbnails?.w160}}
-          ></Avatar>
-          <Text style={{marginLeft: 10}}>juku</Text>
-          <Icon
-            type="ionicon"
-            name="ios-ellipsis-vertical-outline"
-            color="#000"
-            onPress={() => console.log('menu')}
-            containerStyle={{
-              alignSelf: 'flex-end',
-              left: 245,
+    <SafeAreaView style={styles.droidSafeArea}>
+      <View style={styles.container}>
+        {comments.map((item, i) => (
+          <RNEListItem
+            key={i}
+            onPress={() => console.log(item.avatarUri)}
+            bottomDivider
+          >
+            <Avatar
+              size="small"
+              rounded
+              source={{uri: item.avatarUri}}
+            ></Avatar>
+            <RNEListItem.Content>
+              <RNEListItem.Title numberOfLines={3} style={{fontSize: 15}}>
+                {item.comment}
+              </RNEListItem.Title>
+            </RNEListItem.Content>
+          </RNEListItem>
+        ))}
+        <View>
+          <Input
+            placeholder="Comment"
+            onChangeText={(value) => {
+              setComment(value);
             }}
-          />
-        </View>
-        <View style={{width: '100%'}}>
-          {singleMedia.media_type === 'image' && (
-            <Card.Image
-              style={{
-                width: '100%',
-                height: undefined,
-                aspectRatio: 1,
-                borderRadius: 10,
-              }}
-              source={{uri: uploadsUrl + singleMedia.filename}}
-            />
-          )}
-        </View>
-        <View style={{flexDirection: 'row', width: '100%', marginTop: 10}}>
-          <Icon
-            //ios-heart for filled heart
-            type="ionicon"
-            name="ios-heart-outline"
-            color="#000"
-            onPress={() => console.log('menu')}
-            size={40}
-          />
-          <Icon
-            type="ionicon"
-            name="ios-chatbubble-ellipses-outline"
-            color="#000"
-            onPress={() => console.log('menu')}
-            size={38}
-            containerStyle={{marginLeft: 15}}
+            rightIcon={
+              <Icon
+                type="ionicon"
+                name="paper-plane-outline"
+                size={24}
+                color="black"
+                onPress={async () => {
+                  try {
+                    const token = await AsyncStorage.getItem('userToken');
+                    const upload = await addComment(
+                      route.params.file_id,
+                      comment,
+                      token
+                    );
+                    console.log('comment:', comment);
+                    if (upload) {
+                      alert('Comment added');
+                    }
+                  } catch (e) {
+                    alert('Error: ', e.message);
+                    console.log('Error', e.message);
+                  }
+                }}
+              />
+            }
           />
         </View>
       </View>
-    </RNEListItem>
+      <StatusBar style={{backgroundColor: '#fff'}} />
+    </SafeAreaView>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+  },
+  droidSafeArea: {
+    backgroundColor: '#ccc',
+    paddingTop: Platform.OS === 'android' ? 10 : 0,
+  },
+});
+
 Comments.propTypes = {
-  singleMedia: PropTypes.object.isRequired,
   navigation: PropTypes.object.isRequired,
-  showButtons: PropTypes.bool.isRequired,
 };
 
 export default Comments;
