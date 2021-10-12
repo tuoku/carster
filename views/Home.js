@@ -51,7 +51,7 @@ const Home = ({navigation}) => {
               lineHeight: 43,
             },
           }}
-          // 'type' prop to change icon set
+
           rightComponent={
             <View style={styles.headerRight}>
               <Icon
@@ -60,7 +60,12 @@ const Home = ({navigation}) => {
                 color="#000"
                 onPress={() => console.log('pressed')}
               />
-              <Icon name="search" color="#000" style={{marginLeft: 15}} />
+              <Icon
+                name="search"
+                color="#000"
+                style={{marginLeft: 15}}
+                onPress={() => navigation.navigate('Search')}
+              />
             </View>
           }
         />

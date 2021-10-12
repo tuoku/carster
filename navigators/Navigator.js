@@ -19,6 +19,8 @@ import Messages from '../views/Messages';
 import Settings from '../views/Settings';
 import Profile from '../views/Profile';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import EditProfile from '../views/EditProfile';
+import Search from '../views/Search';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -46,6 +48,20 @@ const StackScreen = () => {
           }}
         />
       )}
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{
+          headerShown: true,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{
+          headerShown: true,
+        }}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 };
@@ -69,6 +85,7 @@ const DrawerScreen = () => {
         name={user.username}
         component={Profile}
         options={{
+          headerShown: false,
           drawerIcon: ({focused, size}) => (
             <Icon name="user" size={size} color="black" />
           ),
@@ -78,6 +95,7 @@ const DrawerScreen = () => {
         name="Home"
         component={Home}
         options={{
+          headerShown: false,
           drawerIcon: ({focused, size}) => (
             <Icon name="home" size={size} color="black" />
           ),
