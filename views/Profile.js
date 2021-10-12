@@ -97,6 +97,7 @@ const Profile = ({userr, navigation}) => {
 };
 
 const styles = StyleSheet.create({
+
   header: {
     backgroundColor: '#00BFFF',
     height: 200,

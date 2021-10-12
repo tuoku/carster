@@ -11,6 +11,7 @@ import {
 import {Header, Icon} from 'react-native-elements';
 import AppLoading from 'expo-app-loading';
 import {useFonts, FugazOne_400Regular} from '@expo-google-fonts/fugaz-one';
+import List from '../components/List';
 
 const Home = ({navigation}) => {
   let [fontsLoaded] = useFonts({
@@ -28,11 +29,13 @@ const Home = ({navigation}) => {
             padding: 0,
             margin: 0,
           }}
-          leftComponent={{
-            icon: 'menu',
-            color: '#000',
-            iconStyle: {color: '#000'},
-          }}
+          leftComponent={
+            <Icon
+              name="menu"
+              color="#000"
+              onPress={() => console.log('menu')}
+            />
+          }
           leftContainerStyle={{
             top: 5,
           }}
@@ -48,6 +51,7 @@ const Home = ({navigation}) => {
               lineHeight: 43,
             },
           }}
+
           rightComponent={
             <View style={styles.headerRight}>
               <Icon
@@ -65,7 +69,9 @@ const Home = ({navigation}) => {
             </View>
           }
         />
-        <View style={styles.container}></View>
+        <View style={styles.container}>
+          <List navigation={navigation} />
+        </View>
         <StatusBar style={{backgroundColor: '#fff'}} />
       </SafeAreaView>
     );

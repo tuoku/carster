@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component, Fragment, useContext, useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -8,15 +8,41 @@ import {
 } from 'react-native';
 import {Video, AVPlaybackStatus} from 'expo-av';
 import LoginForm from '../components/LoginForm';
+import {MainContext} from '../contexts/MainContext';
 import {zhCN} from 'date-fns/locale';
+import {useUser} from '../hooks/ApiHooks';
 import {Button} from 'react-native-elements';
 import RegisterForm from '../components/RegisterForm';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const {width, height} = Dimensions.get('window');
 
 const Login = ({navigation}) => {
   const video = React.useRef(null);
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {checkToken} = useUser();
   const [status, setStatus] = React.useState({});
   const [registerFormToggle, setRegisterFormToggle] = React.useState(false);
+
+  const getToken = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    console.log('logIn asyncstorage token:', userToken);
+    if (userToken) {
+      try {
+        const userInfo = await checkToken(userToken);
+        if (userInfo.user_id) {
+          setUser(userInfo);
+          setIsLoggedIn(true);
+        }
+      } catch (e) {
+        console.log('getToken', e.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Video

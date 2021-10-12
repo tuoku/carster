@@ -23,7 +23,7 @@ const useMedia = (ownFiles) => {
 
   const loadMedia = async () => {
     try {
-      let mediaIlmanThumbnailia = await useTag().getFilesByTag(appID);
+      let mediaIlmanThumbnailia = await useTag().getFilesByTag('ilenAppi');
 
       if (ownFiles) {
         mediaIlmanThumbnailia = mediaIlmanThumbnailia.filter(
@@ -232,19 +232,60 @@ const useTag = () => {
 
 const useFavourites = () => {
   const addFavourite = async (fileId, token) => {
-    // post /favourites
+    const requestOptions = {
+      method: 'POST',
+      headers: {'x-access-token': token, 'Content-type': 'application/json'},
+      body: JSON.stringify({
+        file_id: fileId,
+      }),
+    };
+    try {
+      const response = await doFetch(baseUrl + 'favourites', requestOptions);
+      console.log("body: " + requestOptions.body);
+      return response;
+    } catch (error) {
+      console.log('fav error', error.message);
+    }
   };
 
   const deleteFavourite = async (fileId, token) => {
-    // DELETE /favourites/file/:id
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {'x-access-token': token},
+    };
+    try {
+      const response = await doFetch(baseUrl + 'favourites/file/' + fileId, requestOptions);
+      return response;
+    } catch (error) {
+      console.log('fav error', error.message);
+    }
   };
 
   const getFavouritesByFileId = async (fileId) => {
     // get /favourites/file/:id
+
+    const requestOptions = {
+      method: 'GET',
+    };
+    try {
+      const response = await doFetch(baseUrl + 'favourites/file/' + fileId, requestOptions);
+      return response;
+    } catch (error) {
+      console.log('fav error', error.message);
+    }
   };
 
   const getMyFavourites = (token) => {
-    // GET /favourites
+    const requestOptions = {
+      method: 'GET',
+      headers: {'x-access-token': token},
+    };
+    try {
+      const response = doFetch(baseUrl + 'favourites', requestOptions);
+      return response;
+    } catch (error) {
+      console.log('fav error', error.message);
+    }
   };
 
   return {
