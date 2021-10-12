@@ -7,8 +7,8 @@ const LogoutItem = () => {
   return (
     <DrawerItem
       label="Logout"
-      onPress={async () => {
-        await AsyncStorage.clear;
+      onPress={() => {
+        AsyncStorage.clear;
         setIsLoggedIn(false);
       }}
     ></DrawerItem>
