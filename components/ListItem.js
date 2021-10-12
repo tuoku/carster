@@ -19,7 +19,6 @@ import {View} from 'react-native';
 
 const ListItem = ({singleMedia, navigation, showButtons}) => {
   const {update, setUpdate} = useContext(MainContext);
-  console.log('singleMedia', singleMedia);
   const {deleteMedia} = useMedia();
   const {getUserInfo} = useUser();
   const [ownerInfo, setOwnerInfo] = useState({username: ''});
@@ -183,7 +182,7 @@ const ListItem = ({singleMedia, navigation, showButtons}) => {
             type="ionicon"
             name="ios-chatbubble-ellipses-outline"
             color="#000"
-            onPress={() => console.log('menu')}
+            onPress={() => navigation.navigate('Comments', singleMedia)}
             size={38}
             containerStyle={{marginLeft: 15}}
           />

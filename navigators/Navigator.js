@@ -18,6 +18,7 @@ import Notifications from '../views/Notifications';
 import Messages from '../views/Messages';
 import Settings from '../views/Settings';
 import Profile from '../views/Profile';
+import Comments from '../views/Comments';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import EditProfile from '../views/EditProfile';
 import Search from '../views/Search';
@@ -64,6 +65,10 @@ const StackScreen = () => {
           headerShown: true,
         }}
       ></Stack.Screen>
+
+
+      <Stack.Screen name="Comments" component={Comments} />
+
       <Stack.Screen
         name="GuestProfile"
         component={GuestProfile}
@@ -78,6 +83,7 @@ const StackScreen = () => {
           headerShown: false,
         }}
       ></Stack.Screen>
+
     </Stack.Navigator>
   );
 };
