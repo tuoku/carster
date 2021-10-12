@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Text,
 } from 'react-native';
-import {Header} from 'react-native-elements';
+import {Header, Icon} from 'react-native-elements';
 import AppLoading from 'expo-app-loading';
 import {useFonts, FugazOne_400Regular} from '@expo-google-fonts/fugaz-one';
 
@@ -48,7 +48,22 @@ const Home = ({navigation}) => {
               lineHeight: 43,
             },
           }}
-          rightComponent={{icon: 'search', color: '#000'}}
+          rightComponent={
+            <View style={styles.headerRight}>
+              <Icon
+                type="feather"
+                name="upload"
+                color="#000"
+                onPress={() => console.log('pressed')}
+              />
+              <Icon
+                name="search"
+                color="#000"
+                style={{marginLeft: 15}}
+                onPress={() => navigation.navigate('Search')}
+              />
+            </View>
+          }
         />
         <View style={styles.container}></View>
         <StatusBar style={{backgroundColor: '#fff'}} />
@@ -65,6 +80,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ccc',
     paddingTop: Platform.OS === 'android' ? 10 : 0,
+  },
+  headerRight: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 });
 
