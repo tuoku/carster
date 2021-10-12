@@ -21,6 +21,8 @@ import Profile from '../views/Profile';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import EditProfile from '../views/EditProfile';
 import Search from '../views/Search';
+import GuestProfile from '../views/GuestProfile';
+import Chat from '../views/Chat';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -60,6 +62,20 @@ const StackScreen = () => {
         component={Search}
         options={{
           headerShown: true,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="GuestProfile"
+        component={GuestProfile}
+        options={{
+          headerShown: false,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="Chat"
+        component={Chat}
+        options={{
+          headerShown: false,
         }}
       ></Stack.Screen>
     </Stack.Navigator>
