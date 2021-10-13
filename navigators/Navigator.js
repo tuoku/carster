@@ -24,6 +24,7 @@ import EditProfile from '../views/EditProfile';
 import Search from '../views/Search';
 import GuestProfile from '../views/GuestProfile';
 import Chat from '../views/Chat';
+import Upload from '../views/Upload';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -68,6 +69,8 @@ const StackScreen = () => {
 
 
       <Stack.Screen name="Comments" component={Comments} />
+
+      <Stack.Screen name="Upload" component={Upload} />
 
       <Stack.Screen
         name="GuestProfile"

@@ -58,7 +58,7 @@ const Home = ({navigation}) => {
                 type="feather"
                 name="upload"
                 color="#000"
-                onPress={() => console.log('pressed')}
+                onPress={() => navigation.navigate('Upload')}
               />
               <Icon
                 name="search"
